@@ -16,12 +16,12 @@ namespace SimpleCustomEvents
 
         public void OnApplicationStart()
         {
-            Logger.log.Debug("OnApplicationStart");
+            //Logger.log.Debug("OnApplicationStart");
         }
 
         public void OnApplicationQuit()
         {
-            Logger.log.Debug("OnApplicationQuit");
+            //Logger.log.Debug("OnApplicationQuit");
         }
 
         public void OnFixedUpdate()
