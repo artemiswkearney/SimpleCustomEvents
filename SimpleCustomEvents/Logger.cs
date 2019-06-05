@@ -1,6 +1,6 @@
 ﻿using IPALogger = IPA.Logging.Logger;
 
-namespace SimpleCustomEvents
+namespace CustomEvents
 {
     internal static class Logger
     {

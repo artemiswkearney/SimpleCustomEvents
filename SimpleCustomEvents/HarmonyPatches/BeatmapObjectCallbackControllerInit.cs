@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleCustomEvents.HarmonyPatches
+namespace CustomEvents.HarmonyPatches
 {
     [HarmonyPatch(typeof(BeatmapObjectCallbackController), "Init")]
     class BeatmapObjectCallbackControllerInit

@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 
-namespace SimpleCustomEvents
+namespace CustomEvents
 {
     public class Plugin : IBeatSaberPlugin
     {

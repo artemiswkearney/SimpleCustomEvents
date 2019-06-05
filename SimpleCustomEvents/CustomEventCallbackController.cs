@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static IPA.Utilities.ReflectionUtil;
 
-namespace SimpleCustomEvents
+namespace CustomEvents
 {
     /// <summary>
     /// Some code based on code in the Beat Saber class BeatmapObjectController. No code directly copied.
