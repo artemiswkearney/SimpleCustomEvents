@@ -1,6 +1,8 @@
-﻿using IPA;
+﻿using Harmony;
+using IPA;
 using IPA.Config;
 using IPA.Utilities;
+using System.Reflection;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 
@@ -11,6 +13,8 @@ namespace SimpleCustomEvents
 
         public void Init(IPALogger logger)
         {
+            var harmony = HarmonyInstance.Create("com.arti.BeatSaber.CustomEvents");
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
             Logger.log = logger;
         }
 
