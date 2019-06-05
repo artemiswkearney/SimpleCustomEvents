@@ -4,6 +4,7 @@
     "description": "Simple plugin to broadcast CustomJSONData's custom events.",
     "gameVersion": "1.0.1",
     "dependsOn": {
+        "CustomJSONData": "^0.0.1",
         "BSIPA": "^3.12.19"
     },
     "id": "CustomEvents",
