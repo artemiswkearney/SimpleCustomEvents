@@ -2,6 +2,7 @@
 using IPA;
 using IPA.Config;
 using IPA.Utilities;
+using System;
 using System.Reflection;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
@@ -10,6 +11,8 @@ namespace CustomEvents
 {
     public class Plugin : IBeatSaberPlugin
     {
+        public static event Action<CustomEventCallbackController> callbackControllerAwake;
+        internal static void invokeCallbackControllerAwake(CustomEventCallbackController callbackController) => callbackControllerAwake?.Invoke(callbackController);
 
         public void Init(IPALogger logger)
         {

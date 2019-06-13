@@ -13,12 +13,14 @@ namespace CustomEvents.HarmonyPatches
         public static void Postfix(BeatmapObjectCallbackController __instance)
         {
             //Logger.log.Info("Creating CustomEventCallbackController");
-            __instance.gameObject.AddComponent<CustomEventCallbackController>()/*
-                .customEventDidTriggerEvent +=
+            var controller = __instance.gameObject.AddComponent<CustomEventCallbackController>();
+            /*
+            controller.customEventDidTriggerEvent +=
                 e =>
                 {
                     Logger.log.Info(e.type + " (" + e.time + ")");
-                }*/;
+                };
+            */
         }
     }
 }

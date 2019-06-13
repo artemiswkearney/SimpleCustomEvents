@@ -87,6 +87,7 @@ namespace CustomEvents
             beatmapDataModel.beatmapDataDidChangeEvent += beatmapDataChanged;
             eventLoopbackCallbackIds = new Dictionary<string, int>();
             beatmapDataChanged();
+            Plugin.invokeCallbackControllerAwake(this);
         }
 
         public void OnDestroy()

@@ -1,8 +1,8 @@
 ﻿{
-    "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
+    "$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
     "author": "Arti",
     "description": "Simple plugin to broadcast CustomJSONData's custom events.",
-    "gameVersion": "1.0.1",
+    "gameVersion": "1.1.0",
     "dependsOn": {
         "CustomJSONData": "^0.0.1",
         "BSIPA": "^3.12.19"
