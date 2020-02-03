@@ -17,8 +17,9 @@ namespace CustomEvents
     public class CustomEventCallbackController : MonoBehaviour
     {
         public BeatmapObjectCallbackController beatmapObjectCallbackController;
-        public BeatmapDataModel beatmapDataModel;
+        public BeatmapData beatmapData;
         public AudioTimeSyncController audioTimeSyncController;
+        public float spawningStartTime;
         protected Dictionary<string, List<CustomEventCallbackData>> _callbackDatas;
         public Dictionary<string, List<CustomEventCallbackData>> callbackDatas
         {
@@ -58,8 +59,9 @@ namespace CustomEvents
         /// </summary>
         public event Action<CustomEventData> customEventDidTriggerEvent;
 
-        public void beatmapDataChanged()
+        public void SetNewBeatmapData(BeatmapData beatmapData)
         {
+            this.beatmapData = beatmapData;
             foreach (var pair in callbackDatas)
             {
                 foreach (var callback in pair.Value)
@@ -67,9 +69,9 @@ namespace CustomEvents
                     callback.nextEventIndex = 0;
                 }
             }
-            if (beatmapDataModel.beatmapData is CustomBeatmapData beatmapData)
+            if (beatmapData is CustomBeatmapData cbd)
             {
-                foreach (var pair in beatmapData.customEventData)
+                foreach (var pair in cbd.customEventData)
                 {
                     if (!eventLoopbackCallbackIds.ContainsKey(pair.Key))
                     {
@@ -82,22 +84,16 @@ namespace CustomEvents
         public void Awake()
         {
             beatmapObjectCallbackController = GetComponent<BeatmapObjectCallbackController>();
-            beatmapDataModel = beatmapObjectCallbackController.GetPrivateField<BeatmapDataModel>("_beatmapDataModel");
             audioTimeSyncController = beatmapObjectCallbackController.GetPrivateField<AudioTimeSyncController>("_audioTimeSyncController");
-            beatmapDataModel.beatmapDataDidChangeEvent += beatmapDataChanged;
+            spawningStartTime = beatmapObjectCallbackController.GetPrivateField<float>("_spawningStartTime");
             eventLoopbackCallbackIds = new Dictionary<string, int>();
-            beatmapDataChanged();
+            SetNewBeatmapData(beatmapObjectCallbackController.GetPrivateField<BeatmapData>("_beatmapData"));
             Plugin.invokeCallbackControllerAwake(this);
-        }
-
-        public void OnDestroy()
-        {
-            if (beatmapDataModel != null) beatmapDataModel.beatmapDataDidChangeEvent -= beatmapDataChanged;
         }
 
         public void LateUpdate()
         {
-            CustomBeatmapData beatmapData = beatmapDataModel.beatmapData as CustomBeatmapData;
+            CustomBeatmapData beatmapData = this.beatmapData as CustomBeatmapData;
             if (beatmapData == null) return;
             foreach (var pair in beatmapData.customEventData)
             {
@@ -108,7 +104,7 @@ namespace CustomEvents
                     {
                         CustomEventData eventData = pair.Value[callbackData.nextEventIndex];
                         if (eventData.time - callbackData.aheadTime >= audioTimeSyncController.songTime) break;
-                        if (eventData.time >= beatmapObjectCallbackController.startSongTime) // skip events before song start
+                        if (eventData.time >= spawningStartTime) // skip events before song start
                         {
                             callbackData.callback(eventData);
                         }

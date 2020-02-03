@@ -2,14 +2,14 @@
     "$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
     "author": "Arti",
     "description": "Simple plugin to broadcast CustomJSONData's custom events.",
-    "gameVersion": "1.1.0",
+    "gameVersion": "1.6.2",
     "dependsOn": {
-        "CustomJSONData": "^0.0.1",
-        "BSIPA": "^3.12.19"
+        "CustomJSONData": "^0.0.4",
+        "BSIPA": "^3.13.2"
     },
     "id": "CustomEvents",
     "name": "CustomEvents",
-    "version": "0.0.1-beta",
+    "version": "0.0.4",
     "links": {
         "project-home": "https://github.com/artemiswkearney/SimpleCustomEvents/wiki",
         "project-source": "https://github.com/artemiswkearney/SimpleCustomEvents",

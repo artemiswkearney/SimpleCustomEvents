@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace CustomEvents.HarmonyPatches
 {
-    [HarmonyPatch(typeof(BeatmapObjectCallbackController), "Init")]
-    class BeatmapObjectCallbackControllerInit
+    [HarmonyPatch(typeof(BeatmapObjectCallbackController), "Start")]
+    class BeatmapObjectCallbackControllerStart
     {
         public static void Postfix(BeatmapObjectCallbackController __instance)
         {
