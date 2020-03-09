@@ -19,6 +19,8 @@ namespace CustomEvents
         public BeatmapObjectCallbackController beatmapObjectCallbackController;
         public BeatmapData beatmapData;
         public AudioTimeSyncController audioTimeSyncController;
+        public static float songTime = 0;
+        public static float songDeltaTime = 0;
         public float spawningStartTime;
         protected Dictionary<string, List<CustomEventCallbackData>> _callbackDatas;
         public Dictionary<string, List<CustomEventCallbackData>> callbackDatas
@@ -42,14 +44,16 @@ namespace CustomEvents
             public float aheadTime;
             public int nextEventIndex;
             public int id;
+            public bool callIfBeforeStartTime;
             protected static int nextId;
 
-            public CustomEventCallbackData(Action<CustomEventData> callback, string eventType, float aheadTime)
+            public CustomEventCallbackData(Action<CustomEventData> callback, string eventType, float aheadTime, bool callIfBeforeStartTime)
             {
                 id = nextId++;
                 this.callback = callback;
                 this.eventType = eventType;
                 this.aheadTime = aheadTime;
+                this.callIfBeforeStartTime = callIfBeforeStartTime;
                 nextEventIndex = 0;
             }
         }
@@ -86,9 +90,17 @@ namespace CustomEvents
             beatmapObjectCallbackController = GetComponent<BeatmapObjectCallbackController>();
             audioTimeSyncController = beatmapObjectCallbackController.GetPrivateField<AudioTimeSyncController>("_audioTimeSyncController");
             spawningStartTime = beatmapObjectCallbackController.GetPrivateField<float>("_spawningStartTime");
+            songTime = audioTimeSyncController.songTime;
+            songDeltaTime = audioTimeSyncController.songTime; // first delta is the point the song starts at, not 0
             eventLoopbackCallbackIds = new Dictionary<string, int>();
             SetNewBeatmapData(beatmapObjectCallbackController.GetPrivateField<BeatmapData>("_beatmapData"));
             Plugin.invokeCallbackControllerAwake(this);
+        }
+
+        public void Update()
+        {
+            songDeltaTime = audioTimeSyncController.songTime - songTime;
+            songTime = audioTimeSyncController.songTime;
         }
 
         public void LateUpdate()
@@ -104,7 +116,7 @@ namespace CustomEvents
                     {
                         CustomEventData eventData = pair.Value[callbackData.nextEventIndex];
                         if (eventData.time - callbackData.aheadTime >= audioTimeSyncController.songTime) break;
-                        if (eventData.time >= spawningStartTime) // skip events before song start
+                        if (eventData.time >= spawningStartTime || callbackData.callIfBeforeStartTime) // skip events before song start
                         {
                             callbackData.callback(eventData);
                         }
@@ -121,9 +133,9 @@ namespace CustomEvents
         /// <param name="eventType">The type of event to call the callback for.</param>
         /// <param name="aheadTime">How far in advance of the event's position in the song to call the callback.</param>
         /// <returns>An ID that can be used with <see cref="RemoveCustomEventCallback(int)"/> to unregister the callback later</returns>
-        public int AddCustomEventCallback(Action<CustomEventData> callback, string eventType, float aheadTime)
+        public int AddCustomEventCallback(Action<CustomEventData> callback, string eventType, float aheadTime, bool callIfBeforeStartTime = false)
         {
-            var callbackData = new CustomEventCallbackData(callback, eventType, aheadTime);
+            var callbackData = new CustomEventCallbackData(callback, eventType, aheadTime, callIfBeforeStartTime);
             if (!callbackDatas.ContainsKey(eventType))
             {
                 callbackDatas[eventType] = new List<CustomEventCallbackData>();
