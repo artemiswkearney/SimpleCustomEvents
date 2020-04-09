@@ -22,6 +22,8 @@ namespace CustomEvents
         public static float songTime = 0;
         public static float songDeltaTime = 0;
         public float spawningStartTime;
+        // set from Harmony patch BOSC_EarlyEventsWereProcessed
+        public static float spawnAheadTime = 0;
         protected Dictionary<string, List<CustomEventCallbackData>> _callbackDatas;
         public Dictionary<string, List<CustomEventCallbackData>> callbackDatas
         {
@@ -88,12 +90,13 @@ namespace CustomEvents
         public void Awake()
         {
             beatmapObjectCallbackController = GetComponent<BeatmapObjectCallbackController>();
-            audioTimeSyncController = beatmapObjectCallbackController.GetPrivateField<AudioTimeSyncController>("_audioTimeSyncController");
-            spawningStartTime = beatmapObjectCallbackController.GetPrivateField<float>("_spawningStartTime");
+            var initData = beatmapObjectCallbackController.GetField<BeatmapObjectCallbackController.InitData, BeatmapObjectCallbackController>("_initData");
+            audioTimeSyncController = beatmapObjectCallbackController.GetField<IAudioTimeSource, BeatmapObjectCallbackController>("_audioTimeSource") as AudioTimeSyncController;
+            spawningStartTime = initData.spawningStartTime;
             songTime = audioTimeSyncController.songTime;
             songDeltaTime = audioTimeSyncController.songTime; // first delta is the point the song starts at, not 0
             eventLoopbackCallbackIds = new Dictionary<string, int>();
-            SetNewBeatmapData(beatmapObjectCallbackController.GetPrivateField<BeatmapData>("_beatmapData"));
+            SetNewBeatmapData(initData.beatmapData);
             Plugin.invokeCallbackControllerAwake(this);
         }
 

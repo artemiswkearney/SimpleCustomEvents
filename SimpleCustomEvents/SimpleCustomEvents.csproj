@@ -45,8 +45,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony.1.2.0.1">
-      <HintPath>..\Refs\0Harmony.1.2.0.1.dll</HintPath>
+    <Reference Include="0Harmony">
+      <HintPath>..\Refs\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="CustomJSONData">
@@ -57,8 +57,9 @@
       <HintPath>..\Refs\IPA.Loader.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MainAssembly">
-      <HintPath>..\Refs\MainAssembly.dll</HintPath>
+    <Reference Include="Main">
+      <HintPath>..\Refs\Main.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,6 +81,7 @@
     <Compile Include="CustomEventCallbackController.cs" />
     <Compile Include="HarmonyPatches\BeatmapObjectCallbackControllerStart.cs" />
     <Compile Include="HarmonyPatches\BeatmapObjectCallbackControllerSetNewBeatmapData.cs" />
+    <Compile Include="HarmonyPatches\BeatmapObjectSpawnController_EarlyEventsWereProcessed.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

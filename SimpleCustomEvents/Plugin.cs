@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using IPA;
 using IPA.Config;
 using IPA.Utilities;
@@ -9,51 +9,30 @@ using IPALogger = IPA.Logging.Logger;
 
 namespace CustomEvents
 {
-    public class Plugin : IBeatSaberPlugin
+    [Plugin(RuntimeOptions.DynamicInit)]
+    public class Plugin
     {
         public static event Action<CustomEventCallbackController> callbackControllerAwake;
         internal static void invokeCallbackControllerAwake(CustomEventCallbackController callbackController) => callbackControllerAwake?.Invoke(callbackController);
+        public static Harmony harmony;
 
+        [Init]
         public void Init(IPALogger logger)
         {
-            var harmony = HarmonyInstance.Create("com.arti.BeatSaber.CustomEvents");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            harmony = new Harmony("com.arti.BeatSaber.CustomEvents");
             Logger.log = logger;
         }
 
-        public void OnApplicationStart()
+        [OnEnable]
+        public void OnEnable()
         {
-            //Logger.log.Debug("OnApplicationStart");
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
-        public void OnApplicationQuit()
+        [OnDisable]
+        public void OnDisable()
         {
-            //Logger.log.Debug("OnApplicationQuit");
-        }
-
-        public void OnFixedUpdate()
-        {
-
-        }
-
-        public void OnUpdate()
-        {
-
-        }
-
-        public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
-        {
-
-        }
-
-        public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
-        {
-
-        }
-
-        public void OnSceneUnloaded(Scene scene)
-        {
-
+            harmony.UnpatchAll();
         }
     }
 }

@@ -1,7 +1,7 @@
 ::from ./bsinstalldir.txt
 "Beat Saber_Data/
 ""Managed/
-"""MainAssembly.dll?virt
+"""Main.dll?virt
 """Microsoft.CSharp.dll
 """IPA.Loader
 """".dll
@@ -10,6 +10,6 @@
 """"dll
 """"CoreModule.dll
 "Libs/
-""0Harmony.1.2.0.1.dll
+""0Harmony.dll
 "Plugins/
 ""CustomJSONData.dll
